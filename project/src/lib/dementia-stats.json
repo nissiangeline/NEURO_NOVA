@@ -1,0 +1,34 @@
+
+{
+  "stats": [
+    {
+      "titleKey": "stats.stat1_title",
+      "value": "55M+",
+      "descKey": "stats.stat1_desc",
+      "icon": "🌍",
+      "color": "hsl(var(--accent) / 0.3)"
+    },
+    {
+      "titleKey": "stats.stat2_title",
+      "value": "1.5x Higher",
+      "descKey": "stats.stat2_desc",
+      "icon": "🏙️",
+      "color": "hsl(var(--primary) / 0.3)"
+    },
+    {
+      "titleKey": "stats.stat3_title",
+      "value": "$1.3T+",
+      "descKey": "stats.stat3_desc",
+      "icon": "💰",
+      "color": "hsl(var(--secondary) / 0.3)"
+    }
+  ],
+  "chartTitleKey": "stats.chart_title",
+  "chartDescKey": "stats.chart_desc",
+  "chartData": [
+    { "nameKey": "stats.chart_label_rural", "prevalence": 5.0 },
+    { "nameKey": "stats.chart_label_urban", "prevalence": 7.5 },
+    { "nameKey": "stats.chart_label_global", "prevalence": 6.5 }
+  ],
+  "source": "stats.source"
+}

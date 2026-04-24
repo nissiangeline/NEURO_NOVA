@@ -1,0 +1,101 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "river",
+      "description": "A calm river flowing through a lush green landscape.",
+      "imageUrl": "https://picsum.photos/seed/river/600/800",
+      "imageHint": "calm river"
+    },
+    {
+      "id": "forest",
+      "description": "Sunlight filtering through the canopy of a dense forest.",
+      "imageUrl": "https://picsum.photos/seed/forest/600/400",
+      "imageHint": "dense forest"
+    },
+    {
+      "id": "cliffs",
+      "description": "Dramatic ocean cliffs with waves crashing below.",
+      "imageUrl": "https://picsum.photos/seed/cliffs/600/700",
+      "imageHint": "ocean cliffs"
+    },
+    {
+      "id": "smile",
+      "description": "A closeup of an elderly person with a joyful smile.",
+      "imageUrl": "https://picsum.photos/seed/smile/600/500",
+      "imageHint": "elderly smile"
+    },
+    {
+      "id": "expert",
+      "description": "A professional headshot of Dr. Riyasath Ali Syed.",
+      "imageUrl": "/expert.jpg",
+      "imageHint": "professional headshot"
+    },
+    {
+      "id": "ocean_calm",
+      "description": "Ocean waves crashing on a sandy beach.",
+      "imageUrl": "https://picsum.photos/seed/beachwaves/1200/1800",
+      "imageHint": "beach waves"
+    },
+    {
+      "id": "ocean_calm_crashing",
+      "description": "A close-up of a calm ocean wave crashing.",
+      "imageUrl": "https://picsum.photos/seed/oceanwave/1800/1200",
+      "imageHint": "ocean wave"
+    },
+    {
+      "id": "forest_new",
+      "description": "A peaceful forest path with sunlight.",
+      "imageUrl": "https://picsum.photos/seed/forest_new/600/400",
+      "imageHint": "peaceful forest"
+    },
+    {
+        "id": "hands",
+        "description": "Close up of an older person's hands holding a younger person's hands.",
+        "imageUrl": "https://picsum.photos/seed/hands/600/600",
+        "imageHint": "holding hands"
+    },
+    {
+        "id": "smile_new",
+        "description": "An elderly person smiling gently.",
+        "imageUrl": "https://picsum.photos/seed/smile_new/600/500",
+        "imageHint": "gentle smile"
+    },
+    {
+        "id": "mountains",
+        "description": "A serene mountain landscape at dawn.",
+        "imageUrl": "https://picsum.photos/seed/mountains/800/600",
+        "imageHint": "serene mountains"
+    },
+    {
+        "id": "ocean_view",
+        "description": "A person looking out over a calm ocean.",
+        "imageUrl": "https://picsum.photos/seed/ocean_view/600/900",
+        "imageHint": "ocean view"
+    },
+    {
+        "id": "reading",
+        "description": "An older person reading a book by a window.",
+        "imageUrl": "https://picsum.photos/seed/reading/600/800",
+        "imageHint": "person reading"
+    },
+    {
+        "id": "sunset",
+        "description": "A peaceful sunset over a lake.",
+        "imageUrl": "https://picsum.photos/seed/sunset/700/600",
+        "imageHint": "peaceful sunset"
+    },
+    {
+      "id": "path",
+      "description": "A winding path through a sunlit forest.",
+      "imageUrl": "https://picsum.photos/seed/path/600/800",
+      "imageHint": "forest path"
+    },
+    {
+      "id": "tea",
+      "description": "A warm cup of tea on a wooden table.",
+      "imageUrl": "https://picsum.photos/seed/tea/600/400",
+      "imageHint": "cup tea"
+    }
+  ]
+}
