@@ -7,13 +7,13 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "studio-8668201909-34cdb",
-  "appId": "1:35233822162:web:1d4dd6af4ef16a22a6c40b",
-  "apiKey": "AIzaSyBwYOrNjsjN8-9tfgGGIQPrW0mZb0BvCGc",
-  "authDomain": "studio-8668201909-34cdb.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "35233822162",
-  "databaseURL": "https://studio-8668201909-34cdb-default-rtdb.firebaseio.com"
+  apiKey: "AIzaSyAzAn-zYAJXEs1K-2JUFJH9AvFSMOtO3fQ",
+  authDomain: "neuro-nova-lol-95191906-db97a.firebaseapp.com",
+  databaseURL: "https://neuro-nova-lol-95191906-db97a-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "neuro-nova-lol-95191906-db97a",
+  storageBucket: "neuro-nova-lol-95191906-db97a.firebasestorage.app",
+  messagingSenderId: "698351761458",
+  appId: "1:698351761458:web:82e308ff6634ebf07fe42b"
 };
 
 // Initialize Firebase
