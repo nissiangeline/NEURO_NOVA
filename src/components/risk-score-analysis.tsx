@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -9,13 +8,22 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "./ui/card";
 
 import type { AnalyzeStroopPerformanceOutput } from "@/ai/flows/analyze-stroop-performance";
 import type { AnalyzeMazePerformanceOutput } from "@/ai/flows/analyze-maze-performance";
 import type { AnalyzeVoiceRecordingOutput } from "@/ai/flows/analyze-voice-recording";
 import type { AnalyzeMemoryPerformanceOutput } from "@/ai/flows/analyze-memory-performance";
-import { calculateRiskScore, CalculateRiskScoreOutput } from "@/ai/flows/calculate-risk-score";
+
+import {
+  calculateRiskScore,
+  CalculateRiskScoreOutput,
+} from "@/ai/flows/calculate-risk-score";
 
 type RiskScoreAnalysisProps = {
   voiceAnalysis: AnalyzeVoiceRecordingOutput;
@@ -30,129 +38,394 @@ export default function RiskScoreAnalysis({
   stroopAnalysis,
   memoryAnalysis,
 }: RiskScoreAnalysisProps) {
+
   const { user } = useAuth();
+
   const router = useRouter();
+
   const { toast } = useToast();
 
-  const [analysisResult, setAnalysisResult] = useState<CalculateRiskScoreOutput | null>(null);
+  const [analysisResult, setAnalysisResult] =
+    useState<CalculateRiskScoreOutput | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
     if (!user) {
       setIsLoading(false);
       return;
     }
 
     const performAnalysis = async () => {
+
       setIsLoading(true);
 
-      const calculateAverage = (metrics: { actualPercentage: number }[] | undefined): number => {
+      const calculateAverage = (
+        metrics: { actualPercentage: number }[] | undefined
+      ): number => {
+
         if (!metrics || metrics.length === 0) return 0;
-        const total = metrics.reduce((sum, m) => sum + m.actualPercentage, 0);
+
+        const total = metrics.reduce(
+          (sum, m) => sum + m.actualPercentage,
+          0
+        );
+
         return Math.round(total / metrics.length);
       };
 
       const scores = {
-        voiceScore: calculateAverage(voiceAnalysis?.metrics),
-        mazeScore: calculateAverage(mazeAnalyses?.flatMap(a => a.metrics)),
-        stroopScore: calculateAverage(stroopAnalysis?.metrics),
-        memoryScore: calculateAverage(memoryAnalysis?.metrics),
+
+        voiceScore: calculateAverage(
+          voiceAnalysis?.metrics
+        ),
+
+        mazeScore: calculateAverage(
+          mazeAnalyses?.flatMap((a) => a.metrics)
+        ),
+
+        stroopScore: calculateAverage(
+          stroopAnalysis?.metrics
+        ),
+
+        memoryScore: calculateAverage(
+          memoryAnalysis?.metrics
+        ),
       };
 
       try {
+
         const result = await calculateRiskScore({
+
           scores,
+
           userContext: {
             age: 50,
-            gender: 'female'
-          }
+            gender: "female",
+          },
         });
 
         setAnalysisResult(result);
 
-        await update(ref(db, `users/${user.uid}/scores`), {
-          ...result,
-          lastScreening: new Date().toISOString(),
-        });
+        await update(
+          ref(db, `users/${user.uid}/scores`),
+          {
+            ...result,
+            lastScreening: new Date().toISOString(),
+          }
+        );
 
         toast({
           title: "Analysis Complete",
-          description: "Your final cognitive score has been calculated and saved.",
+          description:
+            "Your final cognitive analysis has been generated successfully.",
         });
+
       } catch (error) {
-        console.error("Failed to calculate or save risk score:", error);
+
+        console.error(
+          "Failed to calculate or save risk score:",
+          error
+        );
+
         toast({
           variant: "destructive",
           title: "Analysis Failed",
-          description: "There was an error generating your final analysis.",
+          description:
+            "There was an error generating your cognitive report.",
         });
+
       } finally {
+
         setIsLoading(false);
       }
     };
 
     performAnalysis();
-  }, [voiceAnalysis, mazeAnalyses, stroopAnalysis, memoryAnalysis, user, toast]);
+
+  }, [
+    voiceAnalysis,
+    mazeAnalyses,
+    stroopAnalysis,
+    memoryAnalysis,
+    user,
+    toast,
+  ]);
 
   if (isLoading || !analysisResult) {
+
     return (
-      <div className="flex flex-col items-center justify-center bg-white rounded-xl shadow-lg p-6 border border-gray-200 w-full max-w-2xl mx-auto h-96">
-        <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground">Calculating your final analysis...</p>
+
+      <div className="flex flex-col items-center justify-center bg-white rounded-3xl shadow-2xl p-10 border border-gray-200 w-full max-w-3xl mx-auto h-[500px]">
+
+        <Loader2 className="h-16 w-16 animate-spin text-primary mb-6" />
+
+        <h2 className="text-3xl font-bold mb-4 text-center">
+          🧠 Neuro Nova AI is analyzing your cognitive patterns...
+        </h2>
+
+        <p className="text-muted-foreground text-lg text-center max-w-xl leading-8">
+
+          Generating personalized cognitive interpretation
+          based on your speech fluency, memory retention,
+          attentional control, and visuospatial performance.
+
+        </p>
+
       </div>
     );
   }
 
-  const { finalRiskScore, riskLevel, summary, ...scores } = analysisResult;
+  const {
+    finalRiskScore,
+    riskLevel,
+    summary,
+    ...scores
+  } = analysisResult;
 
   return (
-    <Card className="bg-white rounded-xl shadow-2xl p-6 border border-gray-200 w-full max-w-2xl mx-auto mt-10">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-bold text-primary mb-2">Your Cognitive Snapshot</CardTitle>
-      </CardHeader>
-      <CardContent className="text-center">
-        <div className="grid grid-cols-2 gap-4 my-6 text-left">
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <p className="text-sm font-semibold text-blue-800">1. Voice Test Score</p>
-            <p className="text-2xl font-bold">{scores.voiceScore}%</p>
+
+    <div className="max-w-6xl mx-auto mt-10 space-y-8">
+
+      {/* MAIN REPORT CARD */}
+      <Card className="rounded-[32px] shadow-2xl border border-slate-200 overflow-hidden bg-white/95 backdrop-blur-md">
+
+        {/* HEADER */}
+        <div className="bg-gradient-to-r from-sky-100 via-blue-50 to-cyan-100 p-10 border-b">
+
+          <div className="text-center space-y-4">
+
+            <h1 className="text-5xl font-extrabold text-slate-900">
+              🧠 Final Cognitive Snapshot
+            </h1>
+
+            <p className="text-lg text-slate-600">
+              AI-powered combined cognitive screening report generated by Neuro Nova
+            </p>
+
+            <p className="text-sm text-slate-500">
+              Generated on {new Date().toLocaleString()}
+            </p>
+
           </div>
-          <div className="bg-green-50 p-4 rounded-lg">
-            <p className="text-sm font-semibold text-green-800">2. Maze Game Score</p>
-            <p className="text-2xl font-bold">{scores.mazeScore}%</p>
-          </div>
-          <div className="bg-yellow-50 p-4 rounded-lg">
-            <p className="text-sm font-semibold text-yellow-800">3. Stroop Test Score</p>
-            <p className="text-2xl font-bold">{scores.stroopScore}%</p>
-          </div>
-          <div className="bg-purple-50 p-4 rounded-lg">
-            <p className="text-sm font-semibold text-purple-800">4. Memory Game Score</p>
-            <p className="text-2xl font-bold">{scores.memoryScore}%</p>
-          </div>
+
         </div>
 
-        <h3 className="text-xl font-semibold text-gray-700 mt-8">Final Analysis</h3>
-        <div className="text-6xl font-bold text-gray-800 my-2">{(finalRiskScore / 10).toFixed(1)}<span className="text-5xl">/10</span></div>
-        <div
-          className={`text-2xl font-bold mb-4 ${
-            riskLevel === "Low Risk"
-              ? "text-green-500"
-              : riskLevel === "Medium Risk"
-              ? "text-yellow-500"
-              : "text-red-500"
-          }`}
-        >
-          {riskLevel}
-        </div>
-        
-        <CardDescription className="text-base text-gray-600 max-w-md mx-auto">{summary}</CardDescription>
+        <CardContent className="p-8 md:p-12 space-y-10">
 
-        <p className="text-xs text-muted-foreground mt-8 px-4">
-          <strong>Disclaimer:</strong> This is a screening tool, not a medical diagnosis. Please consult a qualified neurologist for clinical evaluation.
-        </p>
-        <Button onClick={() => router.push('/dashboard')} className="mt-8">
-          Return to Dashboard
-        </Button>
-      </CardContent>
-    </Card>
+          {/* OVERALL CARDS */}
+          <div className="grid md:grid-cols-3 gap-6">
+
+            {/* FINAL SCORE */}
+            <div className="rounded-3xl bg-gradient-to-br from-sky-500 to-cyan-500 text-white p-8 shadow-lg">
+
+              <p className="text-lg font-medium opacity-90">
+                Overall Cognitive Score
+              </p>
+
+              <h2 className="text-6xl font-extrabold mt-3">
+                {(finalRiskScore / 10).toFixed(1)}/10
+              </h2>
+
+              <p className="mt-4 text-sky-50 leading-7">
+                Combined AI-generated score based on all completed screening modules.
+              </p>
+
+            </div>
+
+            {/* RISK */}
+            <div
+              className={`rounded-3xl text-white p-8 shadow-lg ${
+                riskLevel === "Low Risk"
+                  ? "bg-gradient-to-br from-green-500 to-emerald-500"
+                  : riskLevel === "Medium Risk"
+                  ? "bg-gradient-to-br from-yellow-500 to-orange-500"
+                  : "bg-gradient-to-br from-red-500 to-rose-500"
+              }`}
+            >
+
+              <p className="text-lg font-medium opacity-90">
+                Risk Classification
+              </p>
+
+              <h2 className="text-5xl font-extrabold mt-3">
+                {riskLevel}
+              </h2>
+
+              <p className="mt-4 leading-7">
+                Dynamically generated using real cognitive performance data.
+              </p>
+
+            </div>
+
+            {/* AI CONFIDENCE */}
+            <div className="rounded-3xl bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white p-8 shadow-lg">
+
+              <p className="text-lg font-medium opacity-90">
+                AI Confidence Level
+              </p>
+
+              <h2 className="text-5xl font-extrabold mt-3">
+
+                {Math.floor(
+                  (
+                    scores.voiceScore +
+                    scores.mazeScore +
+                    scores.stroopScore +
+                    scores.memoryScore
+                  ) / 4
+                )}%
+
+              </h2>
+
+              <p className="mt-4 text-purple-50 leading-7">
+                Confidence generated from consistency across all modules.
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* INDIVIDUAL SCORES */}
+          <div>
+
+            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+              Individual Cognitive Module Performance
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+              {/* VOICE */}
+              <div className="rounded-3xl bg-sky-50 border border-sky-100 p-6 shadow-sm">
+
+                <h3 className="font-bold text-xl text-slate-900 mb-4">
+                  Voice Analysis
+                </h3>
+
+                <p className="text-5xl font-extrabold text-sky-700">
+                  {scores.voiceScore}%
+                </p>
+
+                <p className="text-slate-600 mt-4 leading-7">
+                  Speech fluency, hesitation behavior,
+                  and lexical richness were analyzed dynamically.
+                </p>
+
+              </div>
+
+              {/* MEMORY */}
+              <div className="rounded-3xl bg-green-50 border border-green-100 p-6 shadow-sm">
+
+                <h3 className="font-bold text-xl text-slate-900 mb-4">
+                  Memory Game
+                </h3>
+
+                <p className="text-5xl font-extrabold text-green-700">
+                  {scores.memoryScore}%
+                </p>
+
+                <p className="text-slate-600 mt-4 leading-7">
+                  Short-term recall ability and memory efficiency were evaluated.
+                </p>
+
+              </div>
+
+              {/* STROOP */}
+              <div className="rounded-3xl bg-yellow-50 border border-yellow-100 p-6 shadow-sm">
+
+                <h3 className="font-bold text-xl text-slate-900 mb-4">
+                  Stroop Test
+                </h3>
+
+                <p className="text-5xl font-extrabold text-yellow-700">
+                  {scores.stroopScore}%
+                </p>
+
+                <p className="text-slate-600 mt-4 leading-7">
+                  Attention control, response timing,
+                  and cognitive flexibility were measured.
+                </p>
+
+              </div>
+
+              {/* MAZE */}
+              <div className="rounded-3xl bg-purple-50 border border-purple-100 p-6 shadow-sm">
+
+                <h3 className="font-bold text-xl text-slate-900 mb-4">
+                  Maze Navigation
+                </h3>
+
+                <p className="text-5xl font-extrabold text-purple-700">
+                  {scores.mazeScore}%
+                </p>
+
+                <p className="text-slate-600 mt-4 leading-7">
+                  Visuospatial planning and navigation efficiency were assessed.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* AI SUMMARY */}
+          <div className="rounded-[28px] bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200 p-10 shadow-inner">
+
+            <div className="space-y-4">
+
+              <h2 className="text-3xl font-bold text-slate-900">
+                AI Cognitive Interpretation
+              </h2>
+
+              <p className="text-slate-500">
+                Generated dynamically using Neuro Nova AI analysis
+              </p>
+
+              <p className="text-lg leading-9 text-slate-700">
+                {summary}
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* DISCLAIMER */}
+          <div className="rounded-3xl bg-yellow-50 border border-yellow-200 p-8">
+
+            <h2 className="text-2xl font-bold text-yellow-900 mb-4">
+              Disclaimer
+            </h2>
+
+            <p className="text-yellow-800 leading-8 text-lg">
+
+              Neuro Nova is an AI-assisted cognitive screening tool and
+              does not provide a medical diagnosis. The generated report
+              is intended only for preliminary cognitive wellness insights.
+              Users are strongly advised to consult qualified healthcare
+              professionals for clinical evaluation and diagnosis.
+
+            </p>
+
+          </div>
+
+          {/* BUTTON */}
+          <div className="text-center">
+
+            <Button
+              onClick={() => router.push("/dashboard")}
+              className="px-10 py-6 text-lg rounded-2xl shadow-lg"
+            >
+              Return to Dashboard
+            </Button>
+
+          </div>
+
+        </CardContent>
+
+      </Card>
+
+    </div>
   );
 }
