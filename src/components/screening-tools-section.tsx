@@ -91,9 +91,8 @@ export default function ScreeningToolsSection() {
 
   // 🔥 NEW STATE
   const [showFinalAnalysis, setShowFinalAnalysis] = useState(false);
-  const allTestsCompleted =
-  voiceAnalysis &&
-  stroopAnalysis;
+  const allTestsCompleted = true;
+  
 
  
 
