@@ -91,13 +91,11 @@ export default function ScreeningToolsSection() {
 
   // 🔥 NEW STATE
   const [showFinalAnalysis, setShowFinalAnalysis] = useState(false);
-
   const allTestsCompleted =
-    voiceAnalysis &&
-    mazeAnalyses &&
-    mazeAnalyses.length > 0 &&
-    stroopAnalysis &&
-    memoryAnalysis;
+  voiceAnalysis &&
+  stroopAnalysis;
+
+ 
 
   useEffect(() => {
 
